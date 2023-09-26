@@ -1,0 +1,35 @@
+{
+  "name": "grapql-type",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/config": "^3.3.1",
+    "@types/cookie-parser": "^1.4.4",
+    "@types/jsonwebtoken": "^9.0.3",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.9.3",
+    "@typegoose/typegoose": "^11.5.0",
+    "apollo-server": "^3.12.1",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "class-validator": "^0.14.0",
+    "config": "^3.3.9",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "graphql": "^15.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.5.3",
+    "nanoid": "^5.0.1",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1"
+  }
+}
