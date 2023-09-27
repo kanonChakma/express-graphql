@@ -13,6 +13,7 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { resolvers } from "./resolvers";
 import { User } from "./schema/user.schema";
+import authChecker from "./utils/authChecker";
 import { connectDB } from "./utils/db";
 import { verifyJwt } from "./utils/jwt";
 
@@ -23,6 +24,7 @@ async function bootstrap() {
   //schema
   const schema = await buildSchema({
     resolvers,
+    authChecker,
   });
 
   const app = express();
