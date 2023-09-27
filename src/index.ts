@@ -1,5 +1,5 @@
+import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
-import { ApolloServer } from "apollo-server";
 import {
   ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageProductionDefault,
@@ -12,15 +12,19 @@ import express from "express";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { resolvers } from "./resolvers";
+import { User } from "./schema/user.schema";
+import authChecker from "./utils/authChecker";
 import { connectDB } from "./utils/db";
-const { json } = pkg;
+import { verifyJwt } from "./utils/jwt";
 
 dotenv.config();
+const { json } = pkg;
 
 async function bootstrap() {
   //schema
   const schema = await buildSchema({
     resolvers,
+    authChecker,
   });
 
   const app = express();
@@ -36,7 +40,7 @@ async function bootstrap() {
     ],
   });
 
-  await server.listen();
+  await server.start();
 
   //apply middleware to server
   app.use(
@@ -44,10 +48,24 @@ async function bootstrap() {
     cors<cors.CorsRequest>(),
     json(),
     expressMiddleware(server, {
-      context: async ({ req }) => ({ token: req.headers.token }),
+      context: async ({ req, res }) => {
+        let ctx = {
+          req,
+          res,
+          user: {},
+        };
+
+        if (req.cookies.accessToken) {
+          const user = verifyJwt<User>(req.cookies.accessToken) as User;
+          ctx.user = user;
+        }
+        return ctx;
+      },
     })
   );
-  //connect DB
+  app.listen({ port: 4000 }, () => {
+    console.log("App is listening on http://localhost:4000");
+  });
   connectDB();
 }
 bootstrap();
